@@ -30,7 +30,7 @@ class Main : JavaPlugin() {
 
         val commandMap: MutableMap<String, CommandExecutor> = HashMap()
 
-        commandMap["testmarker"] = MarkerCMD()
+        commandMap["pl3xmarker"] = MarkerCMD()
 
         for(command in commandMap) {
             getCommand(command.key)?.setExecutor(command.value)

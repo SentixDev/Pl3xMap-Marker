@@ -14,7 +14,7 @@ class TabCompleter : TabCompleter {
         args: Array<String>
     ): MutableList<String> {
 
-        if(command.name.equals("testmarker", ignoreCase = true)) {
+        if(command.name.equals("pl3xmarker", ignoreCase = true)) {
             if (args.size == 1) {
                 val suggests: MutableList<String> = ArrayList()
                 suggests.add("<ID>")
@@ -47,8 +47,8 @@ class TabCompleter : TabCompleter {
 
     private fun getPlayers(): MutableList<String> {
         val playerNames: MutableList<String> = ArrayList()
-        for (i in Bukkit.getOnlinePlayers()) {
-            playerNames.add(i.name)
+        for (player in Bukkit.getOnlinePlayers()) {
+            playerNames.add(player.name)
         }
         return playerNames
     }
