@@ -6,4 +6,4 @@ authors: [ Sentix ]
 description: Simple plugin to add markers on pl3xmap
 
 commands:
-  testmarker:
+  pl3xmarker:
