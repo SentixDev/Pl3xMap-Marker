@@ -7,7 +7,7 @@ class StaticStorage {
 
     companion object {
 
-        const val prefix = "§f[§5Pl3xMap-Marker§f] "
+        const val prefix = "§f[§cPl3xMap§1-§5Marker§f] "
 
         const val noPerm = "$prefix §cNo permission."
 
