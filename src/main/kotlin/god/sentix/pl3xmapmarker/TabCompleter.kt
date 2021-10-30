@@ -17,7 +17,7 @@ class TabCompleter : TabCompleter {
             if (args.size == 1) {
                 val suggests: MutableList<String> = ArrayList()
                 suggests.add("set")
-                suggests.add("delete")
+                suggests.add("remove")
                 return suggests
             }
             if (args.size == 2) {
