@@ -32,7 +32,7 @@ class Main : JavaPlugin() {
 
         commandMap["pl3xmarker"] = MarkerCMD()
 
-        for(command in commandMap) {
+        for (command in commandMap) {
             getCommand(command.key)?.setExecutor(command.value)
             getCommand(command.key)?.tabCompleter = TabCompleter()
         }

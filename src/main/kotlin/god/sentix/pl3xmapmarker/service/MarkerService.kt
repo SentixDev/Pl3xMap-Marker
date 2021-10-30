@@ -26,8 +26,8 @@ class MarkerService {
         }
 
         fun getMarker(file: String, id: Int): Marker? {
-            for(marker in getMarkerList(file)!!) {
-                if(marker.id == id) {
+            for (marker in getMarkerList(file)!!) {
+                if (marker.id == id) {
                     return marker
                 }
             }
@@ -49,8 +49,8 @@ class MarkerService {
 
         fun removeMarker(file: String, id: Int) {
             val markerList = getMarkerList(file)!!
-            for(marker in getMarkerList(file)!!) {
-                if(marker.id == id) {
+            for (marker in getMarkerList(file)!!) {
+                if (marker.id == id) {
                     markerList.remove(marker)
                 }
             }
@@ -77,7 +77,8 @@ class MarkerService {
                     .showControls(true)
                     .defaultHidden(false)
                     .build()
-                mapWorld.layerRegistry().register(Key.of("pl3xmarker_" + mapWorld.uuid().toString() + "_marker"), provider)
+                mapWorld.layerRegistry()
+                    .register(Key.of("pl3xmarker_" + mapWorld.uuid().toString() + "_marker"), provider)
                 val task = Pl3xMapTask(mapWorld, provider)
                 Main.plugin?.let { task.runTaskTimerAsynchronously(it, 0, 20L * 5) }
                 StaticStorage.providerMap[mapWorld.uuid().toString()] = task
@@ -98,7 +99,7 @@ class MarkerService {
 
         fun init(file: String) {
             val init = emptyList<Marker>()
-            if(!File(file).exists()) {
+            if (!File(file).exists()) {
                 File(file).writeText(gsonPrettier.toJson(init))
             }
         }
