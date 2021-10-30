@@ -4,6 +4,8 @@ main: god.sentix.pl3xmapmarker.Main
 api-version: 1.17
 authors: [ Sentix ]
 description: Simple plugin to add markers on pl3xmap
+depend:
+  - Pl3xMap
 
 commands:
   pl3xmarker:

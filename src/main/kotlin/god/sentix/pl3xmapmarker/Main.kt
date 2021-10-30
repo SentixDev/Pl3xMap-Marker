@@ -23,7 +23,7 @@ class Main : JavaPlugin() {
     }
 
     override fun onDisable() {
-        MarkerService().Utils().unregister()
+        MarkerService().API().unregister()
     }
 
     private fun registerCommands() {

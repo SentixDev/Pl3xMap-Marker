@@ -1,6 +1,5 @@
 package god.sentix.pl3xmapmarker
 
-import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
@@ -42,15 +41,7 @@ class TabCompleter : TabCompleter {
             }
         }
 
-        return getPlayers()
-    }
-
-    private fun getPlayers(): MutableList<String> {
-        val playerNames: MutableList<String> = ArrayList()
-        for (player in Bukkit.getOnlinePlayers()) {
-            playerNames.add(player.name)
-        }
-        return playerNames
+        return mutableListOf()
     }
 
 }

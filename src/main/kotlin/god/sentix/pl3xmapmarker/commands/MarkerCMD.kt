@@ -31,21 +31,21 @@ class MarkerCMD : CommandExecutor {
                     val description = split[2].trim()
                     val marker = Marker(id, name, description, sender.location.world.name, sender.location.x, sender.location.y, sender.location.z, sender.location.yaw, sender.location.pitch)
 
-                    if(MarkerService().getMarker(file, id) != null) {
+                    if(MarkerService().Utils().getMarker(file, id) != null) {
 
-                        MarkerService().updateMarker(file, marker)
+                        MarkerService().Utils().updateMarker(file, marker)
                         sender.sendMessage(StaticStorage.prefix + "§7Updated existing marker with ID $id.")
 
                     } else {
 
-                        MarkerService().addMarker(file, marker)
+                        MarkerService().Utils().addMarker(file, marker)
                         sender.sendMessage(StaticStorage.prefix + "§7Created marker with ID $id.")
 
                     }
 
                 } else {
 
-                    sender.sendMessage(StaticStorage.prefix + "§7Please use §a/marker ID | NAME | DESCRIPTION§7.")
+                    sender.sendMessage(StaticStorage.prefix + "§7Please use §a/pl3xmarker ID | NAME | DESCRIPTION§7.")
 
                 }
 

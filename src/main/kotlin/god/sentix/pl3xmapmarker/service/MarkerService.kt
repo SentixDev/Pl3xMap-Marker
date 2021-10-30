@@ -18,41 +18,45 @@ import javax.imageio.ImageIO
 
 class MarkerService {
 
-    fun getMarkerList(file: String): MutableList<Marker>? {
-        val type = object : TypeToken<MutableList<Marker>>() {}.type
-        return Gson().fromJson(IO().read(file), type)
-    }
+    inner class Utils {
 
-    fun getMarker(file: String, id: Int): Marker? {
-        for(marker in getMarkerList(file)!!) {
-            if(marker.id == id) {
-                return marker
+        fun getMarkerList(file: String): MutableList<Marker>? {
+            val type = object : TypeToken<MutableList<Marker>>() {}.type
+            return Gson().fromJson(IO().read(file), type)
+        }
+
+        fun getMarker(file: String, id: Int): Marker? {
+            for(marker in getMarkerList(file)!!) {
+                if(marker.id == id) {
+                    return marker
+                }
+            }
+            return null
+        }
+
+        fun addMarker(file: String, marker: Marker) {
+            val markers = getMarkerList(file)
+            if (markers != null) {
+                markers.add(marker)
+                IO().write(file, markers)
             }
         }
-        return null
-    }
 
-    fun addMarker(file: String, marker: Marker) {
-        val markers = getMarkerList(file)
-        if (markers != null) {
-            markers.add(marker)
-            IO().write(file, markers)
+        fun updateMarker(file: String, marker: Marker) {
+            removeMarker(file, marker.id)
+            addMarker(file, marker)
         }
-    }
 
-    fun updateMarker(file: String, marker: Marker) {
-        removeMarker(file, marker.id)
-        addMarker(file, marker)
-    }
-
-    fun removeMarker(file: String, id: Int) {
-        val markerList = getMarkerList(file)!!
-        for(marker in getMarkerList(file)!!) {
-            if(marker.id == id) {
-                markerList.remove(marker)
+        fun removeMarker(file: String, id: Int) {
+            val markerList = getMarkerList(file)!!
+            for(marker in getMarkerList(file)!!) {
+                if(marker.id == id) {
+                    markerList.remove(marker)
+                }
             }
+            IO().write(file, markerList)
         }
-        IO().write(file, markerList)
+
     }
 
     inner class API {
@@ -81,6 +85,11 @@ class MarkerService {
 
         }
 
+        fun unregister() {
+            StaticStorage.providerMap.values.forEach(Pl3xMapTask::disable)
+            StaticStorage.providerMap.clear()
+        }
+
     }
 
     inner class IO {
@@ -100,15 +109,6 @@ class MarkerService {
 
         fun read(file: String): String {
             return File(file).bufferedReader().use { it.readText() }
-        }
-
-    }
-
-    inner class Utils {
-
-        fun unregister() {
-            StaticStorage.providerMap.values.forEach(Pl3xMapTask::disable)
-            StaticStorage.providerMap.clear()
         }
 
     }

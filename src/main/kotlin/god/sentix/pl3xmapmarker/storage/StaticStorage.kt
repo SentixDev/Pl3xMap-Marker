@@ -11,13 +11,13 @@ class StaticStorage {
 
         const val noPerm = "$prefix §cNo permission."
 
-        const val noPlayer = "$prefix §cNo player."
+        const val noPlayer = "$prefix §cNot a player."
 
         const val layer = "Marker"
 
         const val file = "marker.json"
 
-        const val image = "https://cdn.upload.systems/uploads/SAVKEsdz.png"
+        const val image = "https://cdn.upload.systems/uploads/gm3M6Uft.png"
 
         val warpIconKey: Key = Key.of("pl3xmarker_marker_icon")
 

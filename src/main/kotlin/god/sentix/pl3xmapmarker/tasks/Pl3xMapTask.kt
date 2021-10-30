@@ -26,7 +26,7 @@ class Pl3xMapTask(world: MapWorld, provider: SimpleLayerProvider) : BukkitRunnab
         }
 
         provider.clearMarkers()
-        MarkerService().getMarkerList(StaticStorage.file)?.forEach { marker ->
+        MarkerService().Utils().getMarkerList(StaticStorage.file)?.forEach { marker ->
             if(Bukkit.getWorld(marker.world)?.uid == world.uuid()) {
                 handle(marker.id, marker.name, marker.description, Location(Bukkit.getWorld(marker.world), marker.locX, marker.loxY, marker.locZ, marker.yaw, marker.pitch))
             }
