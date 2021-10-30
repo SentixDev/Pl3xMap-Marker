@@ -42,11 +42,6 @@ class MarkerService {
             }
         }
 
-        fun updateMarker(file: String, marker: Marker) {
-            removeMarker(file, marker.id)
-            addMarker(file, marker)
-        }
-
         fun removeMarker(file: String, id: Int) {
             val markerList = getMarkerList(file)!!
             for (marker in getMarkerList(file)!!) {
@@ -55,6 +50,11 @@ class MarkerService {
                 }
             }
             IO().write(file, markerList)
+        }
+
+        fun updateMarker(file: String, marker: Marker) {
+            removeMarker(file, marker.id)
+            addMarker(file, marker)
         }
 
     }
