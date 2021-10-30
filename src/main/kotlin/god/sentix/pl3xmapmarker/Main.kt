@@ -5,9 +5,10 @@ import god.sentix.pl3xmapmarker.service.MarkerService
 import god.sentix.pl3xmapmarker.storage.StaticStorage
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandExecutor
+import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
-import java.util.*
+
 
 class Main : JavaPlugin() {
 
@@ -16,6 +17,9 @@ class Main : JavaPlugin() {
         Bukkit.getConsoleSender().sendMessage("§7Initializing §dPl3xMap§1-§5Marker...")
 
         plugin = getPlugin(Main::class.java)
+
+        initConfiguration()
+        Bukkit.getConsoleSender().sendMessage("§aConfiguration initialized.")
 
         registerCommands()
         Bukkit.getConsoleSender().sendMessage("§aCommands registered.")
@@ -46,8 +50,18 @@ class Main : JavaPlugin() {
 
     }
 
+    private fun initConfiguration() {
+        config.addDefault("layer-name", "Marker")
+        config.addDefault("icon-url", "https://cdn.upload.systems/uploads/gm3M6Uft.png")
+        config.options().copyDefaults(true)
+        saveConfig()
+
+        configuration = config
+    }
+
     companion object {
         var plugin: Plugin? = null
+        var configuration: FileConfiguration? = null
     }
 
 }

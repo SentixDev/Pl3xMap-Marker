@@ -73,7 +73,7 @@ class MarkerService {
             }
 
             Pl3xMapProvider.get().mapWorlds().forEach { mapWorld ->
-                val provider: SimpleLayerProvider = SimpleLayerProvider.builder(StaticStorage.layer)
+                val provider: SimpleLayerProvider = SimpleLayerProvider.builder(StaticStorage.layer!!)
                     .showControls(true)
                     .defaultHidden(false)
                     .build()

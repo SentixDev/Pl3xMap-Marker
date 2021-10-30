@@ -57,8 +57,6 @@ class MarkerCMD : CommandExecutor {
 
                         val split = merged.trim().split("|").toList()
 
-                        println(split[0].trim())
-
                         try {
 
                             val id = split[0].trim().toInt()
