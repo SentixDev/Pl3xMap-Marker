@@ -6,7 +6,7 @@
 
     <groupId>god.sentix</groupId>
     <artifactId>pl3xmap-marker</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
     <packaging>jar</packaging>
 
     <name>Pl3xMap-Marker</name>
