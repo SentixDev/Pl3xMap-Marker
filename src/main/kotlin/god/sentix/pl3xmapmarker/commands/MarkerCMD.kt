@@ -1,7 +1,9 @@
 package god.sentix.pl3xmapmarker.commands
 
+import god.sentix.pl3xmapmarker.Chat
 import god.sentix.pl3xmapmarker.Marker
 import god.sentix.pl3xmapmarker.service.MarkerService
+import god.sentix.pl3xmapmarker.storage.Message
 import god.sentix.pl3xmapmarker.storage.StaticStorage
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -25,21 +27,11 @@ class MarkerCMD : CommandExecutor {
 
                     if (markerList.size == 0) {
 
-                        sender.sendMessage(StaticStorage.prefix + "§cNo markers set.")
+                        Chat().send(sender, Message.EMPTY)
 
                     } else {
 
-                        sender.sendMessage(" ")
-                        sender.sendMessage("§8» §8§m-------------§r §7× §5§lMarker §7× §8§m-------------§r §8«")
-                        sender.sendMessage(" ")
-                        sender.sendMessage(" §8× §dMarkers §7[§5" + markerList.size + "§7]")
-                        sender.sendMessage(" ")
-                        for (marker in markerList) {
-                            sender.sendMessage(" §8× §d${marker.id} | ${marker.name}")
-                        }
-                        sender.sendMessage(" ")
-                        sender.sendMessage("§8» §8§m-------------§r §7× §5§lMarker §7× §8§m-------------§r §8«")
-                        sender.sendMessage(" ")
+                        sendMarkerList(sender, markerList)
 
                     }
 
@@ -78,18 +70,18 @@ class MarkerCMD : CommandExecutor {
                             if (MarkerService().Utils().getMarker(file, id) != null) {
 
                                 MarkerService().Utils().updateMarker(file, marker)
-                                sender.sendMessage(StaticStorage.prefix + "§7Updated existing marker with ID §d$id§7.")
+                                Chat().send(sender, "${Message.PREFIX}<gray>Updated existing marker with ID <color:#8411FB>$id<gray>.</gray>")
 
                             } else {
 
                                 MarkerService().Utils().addMarker(file, marker)
-                                sender.sendMessage(StaticStorage.prefix + "§7Created marker with ID §d$id§7.")
+                                Chat().send(sender, "${Message.PREFIX}<gray>Created marker with ID <color:#8411FB>$id<gray>.</gray>")
 
                             }
 
                         } catch (ex: NumberFormatException) {
 
-                            sender.sendMessage(StaticStorage.prefix + "§cID has to be a number.")
+                            Chat().send(sender, Message.NUMBER_EXC)
 
                         }
 
@@ -108,19 +100,23 @@ class MarkerCMD : CommandExecutor {
                         if(MarkerService().Utils().getMarker(file, id) != null) {
 
                             MarkerService().Utils().removeMarker(file, id)
-                            sender.sendMessage(StaticStorage.prefix + "§7Removed marker with ID §d$id§7.")
+                            Chat().send(sender, "${Message.PREFIX}<gray>Removed marker with ID <color:#8411FB>$id<gray>.</gray>")
 
                         } else {
 
-                            sender.sendMessage(StaticStorage.prefix + "§7No marker with ID §d$id §7found.")
+                            Chat().send(sender, "${Message.PREFIX}<gray>No marker with ID <color:#8411FB>$id <gray>found.</gray>")
 
                         }
 
                     } catch (ex: NumberFormatException) {
 
-                        sender.sendMessage(StaticStorage.prefix + "§cID has to be a number.")
+                        Chat().send(sender, Message.NUMBER_EXC)
 
                     }
+
+                } else if (args.size == 2 && args[0].equals("help", true)) {
+
+                    sendHelpMessage(sender)
 
                 } else {
 
@@ -130,31 +126,53 @@ class MarkerCMD : CommandExecutor {
 
             } else {
 
-                sender.sendMessage(StaticStorage.noPerm)
+                Chat().send(sender, Message.NO_PERM)
 
             }
 
         } else {
 
-            sender.sendMessage(StaticStorage.noPlayer)
+            Chat().send(sender, Message.NO_PLAYER)
 
         }
 
         return true
     }
 
+    val marker = "<gradient:#C028FF:#5B00FF><bold>Marker</gradient>"
+
     private fun sendHelpMessage(sender: Player) {
 
-        sender.sendMessage(" ")
-        sender.sendMessage("§8» §8§m-------------§r §7× §5§lMarker §7× §8§m-------------§r §8«")
-        sender.sendMessage(" ")
-        sender.sendMessage(" §7× §dUsage:")
-        sender.sendMessage(" ")
-        sender.sendMessage("§7× §d/pl3xmarker set §5<ID> §d| §5<NAME> §d| §5<DESCRIPTION>")
-        sender.sendMessage("§7× §d/pl3xmarker remove §5<ID>")
-        sender.sendMessage(" ")
-        sender.sendMessage("§8» §8§m-------------§r §7× §5§lMarker §7× §8§m-------------§r §8«")
-        sender.sendMessage(" ")
+        Chat().send(sender, " ")
+        Chat().send(sender, "§8» §8§m-------------§r §7× $marker §7× §8§m-------------§r §8«")
+        Chat().send(sender, " ")
+
+        Chat().send(sender, " §7× <color:#8411FB>Usage:")
+        Chat().send(sender, " ")
+        Chat().send(sender, " §7× <color:#8411FB>/pl3xmarker set <white><ID></white> | <white><NAME></white> | <white><DESCRIPTION></white></color:#8411FB>")
+        Chat().send(sender, " §7× <color:#8411FB>/pl3xmarker remove <white><ID></white>")
+
+        Chat().send(sender, " ")
+        Chat().send(sender, "§8» §8§m-------------§r §7× $marker §7× §8§m-------------§r §8«")
+        Chat().send(sender, " ")
+
+    }
+
+    private fun sendMarkerList(sender: Player, markerList: MutableList<Marker>) {
+
+        Chat().send(sender, " ")
+        Chat().send(sender, "§8» §8§m-------------§r §7× $marker §7× §8§m-------------§r §8«")
+        Chat().send(sender, " ")
+
+        Chat().send(sender, " §7× <color:#8411FB>Markers §7[<color:#8411FB>" + markerList.size + "§7]")
+        Chat().send(sender, " ")
+        for (marker in markerList) {
+            Chat().send(sender, " §7× <color:#8411FB>${marker.id} §8| <color:#8411FB>${marker.name}")
+        }
+
+        Chat().send(sender, " ")
+        Chat().send(sender, "§8» §8§m-------------§r §7× $marker §7× §8§m-------------§r §8«")
+        Chat().send(sender, " ")
 
     }
 

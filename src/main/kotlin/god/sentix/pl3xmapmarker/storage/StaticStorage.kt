@@ -2,17 +2,13 @@ package god.sentix.pl3xmapmarker.storage
 
 import god.sentix.pl3xmapmarker.Main
 import god.sentix.pl3xmapmarker.tasks.Pl3xMapTask
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.minimessage.MiniMessage
 import net.pl3x.map.api.Key
 
 class StaticStorage {
 
     companion object {
-
-        const val prefix = "§7[§dPl3xMap§1-§5Marker§7] "
-
-        const val noPerm = "$prefix §cNo permission."
-
-        const val noPlayer = "$prefix §cNot a player."
 
         const val file = "marker.json"
 
