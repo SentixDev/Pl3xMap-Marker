@@ -6,6 +6,7 @@ This project is still under development and will be improved and expanded in the
 
 # Download
 https://github.com/SentixDev/Pl3xMap-Marker/releases
+
 https://www.spigotmc.org/resources/pl3xmap-marker.97262/
 
 # Usage
