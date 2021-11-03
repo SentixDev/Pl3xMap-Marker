@@ -1,0 +1,11 @@
+name: Pl3xMap-Marker
+version: '${version}'
+main: god.sentix.pl3xmarker.Pl3xMapMarker
+api-version: 1.17
+depend: [ Pl3xMap ]
+authors: [ Sentix ]
+description: Simple marker extension for Pl3xMap
+website: https://github.com/SentixDev/Pl3xMap-Marker
+
+commands:
+  pl3xmarker:
