@@ -10,6 +10,9 @@ https://github.com/SentixDev/Pl3xMap-Marker/releases
 https://www.spigotmc.org/resources/pl3xmap-marker.97262/
 
 # Usage
+## Permissions:
+To execute the /pl3xmarker command, you need the `pl3xmarker.marker` permission.
+
 ## Commands:
 - /pl3xmarker (Shows a list with all existing markers)
 - /pl3xmarker set <ID> | <NAME> | <DESCRIPTION> (Set a marker at your current location)

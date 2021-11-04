@@ -9,3 +9,8 @@ website: https://github.com/SentixDev/Pl3xMap-Marker
 
 commands:
   pl3xmarker:
+
+permissions:
+  pl3xmarker.marker:
+    description: Gives access to /pl3xmarker command
+    default: op
