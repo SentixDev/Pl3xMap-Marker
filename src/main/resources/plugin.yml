@@ -9,6 +9,7 @@ website: https://github.com/SentixDev/Pl3xMap-Marker
 
 commands:
   pl3xmarker:
+    permission: pl3xmarker.marker
 
 permissions:
   pl3xmarker.marker:
