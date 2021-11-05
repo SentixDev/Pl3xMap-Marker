@@ -1,12 +1,14 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     kotlin("jvm") version "1.6.0-RC2"
+    id("com.github.johnrengelman.shadow") version "7.1.0"
     application
 }
 
 group = "god.sentix"
-version = "1.6"
+version = "1.7"
 
 repositories {
     mavenCentral()
@@ -22,6 +24,7 @@ dependencies {
     implementation("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0-RC2")
+    implementation("org.bstats:bstats-bukkit:2.2.1")
 }
 
 
@@ -31,7 +34,7 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Jar> {
     manifest {
-        attributes["Main-Class"] = "com.example.MainKt"
+        attributes["Main-Class"] = "god.sentix.pl3xmarker.MainKt"
     }
 
     from(sourceSets.main.get().output)
@@ -41,6 +44,14 @@ tasks.withType<Jar> {
         configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
     })
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+tasks.withType<ShadowJar> {
+    project.configurations.implementation.get().isCanBeResolved = true
+
+    configurations = listOf(project.configurations.runtimeClasspath.get())
+    dependencies { exclude { it.moduleGroup != "org.bstats" } }
+    relocate("org.bstats", group)
 }
 
 application {
