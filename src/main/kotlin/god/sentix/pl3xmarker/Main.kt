@@ -9,12 +9,15 @@ import org.bukkit.plugin.java.JavaPlugin
 import god.sentix.pl3xmarker.service.MarkerService
 import god.sentix.pl3xmarker.storage.Message
 import god.sentix.pl3xmarker.storage.StaticStorage
+import org.bstats.bukkit.Metrics
 
 class Main : JavaPlugin() {
 
     override fun onEnable() {
 
         val console = Bukkit.getConsoleSender()
+
+        Chat().send(console, " ")
 
         Chat().send(console, "${Message.PREFIX}<gray>Initializing <gradient:#C028FF:#5B00FF>Pl3xMap-Marker</gradient>...")
 
@@ -35,6 +38,8 @@ class Main : JavaPlugin() {
         Chat().send(console, "${Message.PREFIX}<green>Markers initialized.")
 
         Chat().send(console, "${Message.PREFIX}<gradient:#C028FF:#5B00FF>Pl3xMap-Marker</gradient> <green>initialized.")
+
+        Chat().send(console, " ")
 
     }
 
@@ -57,7 +62,7 @@ class Main : JavaPlugin() {
 
     private fun initConfiguration() {
         config.addDefault("layer-name", "Marker")
-        config.addDefault("icon-url", "https://cdn.upload.systems/uploads/gm3M6Uft.png")
+        config.addDefault("icon-url", "https://cdn.upload.systems/uploads/1zRKxN3t.png")
         config.options().copyDefaults(true)
         saveConfig()
 
