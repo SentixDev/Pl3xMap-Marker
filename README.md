@@ -21,3 +21,6 @@ To execute the /pl3xmarker command, you need the `pl3xmarker.marker` permission.
 ## Configuration:
 - "layer-name:" (define the name of the layer)
 - "icon-url:" (define the link to the marker-icon-image)
+
+## Additional:
+**Of course you can also use HTML tags in the name and description arguments to customize the marker tooltips.**
