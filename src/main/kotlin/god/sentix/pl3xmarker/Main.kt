@@ -13,6 +13,11 @@ import org.bstats.bukkit.Metrics
 
 class Main : JavaPlugin() {
 
+    companion object {
+        lateinit var plugin: Plugin
+        lateinit var configuration: FileConfiguration
+    }
+
     override fun onEnable() {
 
         val console = Bukkit.getConsoleSender()
@@ -33,7 +38,7 @@ class Main : JavaPlugin() {
         Chat().send(console, "${Message.PREFIX}<green>Commands registered.")
 
         Chat().send(console, "${Message.PREFIX}<gray>Initialize markers...")
-        MarkerService().IO().init(StaticStorage.file)
+        MarkerService().IO(StaticStorage.file).init()
         MarkerService().API().initMarkers()
         Chat().send(console, "${Message.PREFIX}<green>Markers initialized.")
 
@@ -67,11 +72,6 @@ class Main : JavaPlugin() {
         saveConfig()
 
         configuration = config
-    }
-
-    companion object {
-        var plugin: Plugin? = null
-        var configuration: FileConfiguration? = null
     }
 
 }

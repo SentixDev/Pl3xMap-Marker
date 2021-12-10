@@ -22,7 +22,7 @@ class MarkerService {
 
         fun getMarkerList(file: String): MutableList<Marker>? {
             val type = object : TypeToken<MutableList<Marker>>() {}.type
-            return Gson().fromJson(IO().read(file), type)
+            return Gson().fromJson(IO(file).read(), type)
         }
 
         fun getMarker(file: String, id: Int): Marker? {
@@ -38,7 +38,7 @@ class MarkerService {
             val markers = getMarkerList(file)
             if (markers != null) {
                 markers.add(marker)
-                IO().write(file, markers)
+                IO(file).write(markers)
             }
         }
 
@@ -49,7 +49,7 @@ class MarkerService {
                     markerList.remove(marker)
                 }
             }
-            IO().write(file, markerList)
+            IO(file).write(markerList)
         }
 
         fun updateMarker(file: String, marker: Marker) {
@@ -93,22 +93,22 @@ class MarkerService {
 
     }
 
-    inner class IO {
+    inner class IO(private val file: String) {
 
         private val gsonPrettier: Gson = GsonBuilder().setPrettyPrinting().create()
 
-        fun init(file: String) {
+        fun init() {
             val init = emptyList<Marker>()
             if (!File(file).exists()) {
                 File(file).writeText(gsonPrettier.toJson(init))
             }
         }
 
-        fun write(file: String, input: MutableList<Marker>) {
+        fun write(input: MutableList<Marker>) {
             File(file).writeText(gsonPrettier.toJson(input))
         }
 
-        fun read(file: String): String {
+        fun read(): String {
             return File(file).bufferedReader().use { it.readText() }
         }
 
