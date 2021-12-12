@@ -80,7 +80,7 @@ class MarkerService {
                 mapWorld.layerRegistry()
                     .register(Key.of("pl3xmarker_" + mapWorld.uuid().toString() + "_marker"), provider)
                 val task = Pl3xMapTask(mapWorld, provider)
-                Main.plugin?.let { task.runTaskTimerAsynchronously(it, 0, 20L * 5) }
+                Main.plugin.let { task.runTaskTimerAsynchronously(it, 0, 20L * 5) }
                 StaticStorage.providerMap[mapWorld.uuid().toString()] = task
             }
 
