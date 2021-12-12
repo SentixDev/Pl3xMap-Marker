@@ -10,9 +10,9 @@ class StaticStorage {
 
         const val file = "marker.json"
 
-        val layer = Main.configuration!!.getString("layer-name")
+        val layer = Main.configuration.getString("layer-name")
 
-        val image = Main.configuration!!.getString("icon-url")
+        val image = Main.configuration.getString("icon-url")
 
         val warpIconKey: Key = Key.of("pl3xmarker_marker_icon")
 
