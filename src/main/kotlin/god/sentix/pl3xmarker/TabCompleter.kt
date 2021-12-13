@@ -20,6 +20,7 @@ class TabCompleter : TabCompleter {
                 suggests.add("set")
                 suggests.add("remove")
                 suggests.add("help")
+                suggests.add("show")
                 return suggests
             }
             if (args.size == 2) {
@@ -40,6 +41,14 @@ class TabCompleter : TabCompleter {
             }
             if (args.size == 6) {
                 suggests.add("<DESCRIPTION>")
+                return suggests
+            }
+            if (args.size == 7) {
+                suggests.add("|")
+                return suggests
+            }
+            if (args.size == 8) {
+                suggests.add("<ICON-URL>")
                 return suggests
             }
         }
