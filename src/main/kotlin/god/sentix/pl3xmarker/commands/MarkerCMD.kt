@@ -110,7 +110,7 @@ class MarkerCMD : CommandExecutor {
                                     )
                                 )
                             } catch (ex: MalformedURLException) {
-                                Chat().send(sender, "${Message.PREFIX}<red>URL invalid - marker-icon set to default.")
+                                Chat().send(sender, "${Message.PREFIX}<gray>Marker icon set to default.")
                             }
 
                         } catch (ex: NumberFormatException) {
