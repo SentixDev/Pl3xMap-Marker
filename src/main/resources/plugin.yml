@@ -1,5 +1,5 @@
 name: Pl3xMap-Marker
-version: '2.0'
+version: '3.0'
 main: god.sentix.pl3xmarker.Main
 api-version: 1.18
 depend: [ Pl3xMap ]

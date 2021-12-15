@@ -13,6 +13,7 @@ import god.sentix.pl3xmarker.tasks.Pl3xMapTask
 import java.awt.Image
 import java.io.File
 import java.io.IOException
+import java.lang.IllegalArgumentException
 import java.net.URL
 import javax.imageio.ImageIO
 
@@ -63,14 +64,9 @@ class MarkerService {
 
         fun initMarkers() {
 
-            try {
-                val image: Image
-                val url = URL(StaticStorage.image)
-                image = ImageIO.read(url)
-                Pl3xMapProvider.get().iconRegistry().register(StaticStorage.warpIconKey, image)
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
+            migrateEntries()
+
+            registerIcons()
 
             Pl3xMapProvider.get().mapWorlds().forEach { mapWorld ->
                 val provider: SimpleLayerProvider = SimpleLayerProvider.builder(StaticStorage.layer!!)
@@ -84,6 +80,37 @@ class MarkerService {
                 StaticStorage.providerMap[mapWorld.uuid().toString()] = task
             }
 
+        }
+
+        private fun migrateEntries() {
+            for (marker in Utils().getMarkerList(StaticStorage.file)!!) {
+                if (marker.iconKey == null || marker.iconUrl == null) {
+                    MarkerService().Utils().updateMarker(
+                        StaticStorage.file, Marker(
+                            marker.id,
+                            marker.name,
+                            marker.description,
+                            "",
+                            "${StaticStorage.markerIconKey}${marker.id}",
+                            marker.world,
+                            marker.locX,
+                            marker.locY,
+                            marker.locZ,
+                            marker.yaw,
+                            marker.pitch
+                        )
+                    )
+                }
+            }
+        }
+
+        private fun registerIcons() {
+            Pl3xMapProvider.get().iconRegistry().register(StaticStorage.markerIconKey, ImageIO.read(URL(StaticStorage.image)))
+            for (marker in Utils().getMarkerList(StaticStorage.file)!!) {
+                if (marker.iconUrl != "") {
+                    Pl3xMapProvider.get().iconRegistry().register(Key.of("pl3xmarker_marker_icon_${marker.id}"), ImageIO.read(URL(marker.iconUrl)))
+                }
+            }
         }
 
         fun unregister() {
