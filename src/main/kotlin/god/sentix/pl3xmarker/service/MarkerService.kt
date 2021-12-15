@@ -1,18 +1,16 @@
 package god.sentix.pl3xmarker.service
 
-import god.sentix.pl3xmarker.Marker
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import god.sentix.pl3xmarker.Main
-import net.pl3x.map.api.Key
-import net.pl3x.map.api.Pl3xMapProvider
-import net.pl3x.map.api.SimpleLayerProvider
+import god.sentix.pl3xmarker.Marker
 import god.sentix.pl3xmarker.storage.StaticStorage
 import god.sentix.pl3xmarker.tasks.Pl3xMapTask
-import java.awt.Image
+import xyz.jpenilla.squaremap.api.Key
+import xyz.jpenilla.squaremap.api.SimpleLayerProvider
+import xyz.jpenilla.squaremap.api.SquaremapProvider
 import java.io.File
-import java.io.IOException
 import java.net.URL
 import javax.imageio.ImageIO
 
@@ -63,16 +61,11 @@ class MarkerService {
 
         fun initMarkers() {
 
-            try {
-                val image: Image
-                val url = URL(StaticStorage.image)
-                image = ImageIO.read(url)
-                Pl3xMapProvider.get().iconRegistry().register(StaticStorage.warpIconKey, image)
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
+            migrateEntries()
 
-            Pl3xMapProvider.get().mapWorlds().forEach { mapWorld ->
+            registerIcons()
+
+            SquaremapProvider.get().mapWorlds().forEach { mapWorld ->
                 val provider: SimpleLayerProvider = SimpleLayerProvider.builder(StaticStorage.layer!!)
                     .showControls(true)
                     .defaultHidden(false)
@@ -84,6 +77,39 @@ class MarkerService {
                 StaticStorage.providerMap[mapWorld.uuid().toString()] = task
             }
 
+        }
+
+        private fun migrateEntries() {
+            for (marker in Utils().getMarkerList(StaticStorage.file)!!) {
+                if (marker.iconKey == null || marker.iconUrl == null) {
+                    MarkerService().Utils().updateMarker(
+                        StaticStorage.file, Marker(
+                            marker.id,
+                            marker.name,
+                            marker.description,
+                            "",
+                            "${StaticStorage.markerIconKey}${marker.id}",
+                            marker.world,
+                            marker.locX,
+                            marker.locY,
+                            marker.locZ,
+                            marker.yaw,
+                            marker.pitch
+                        )
+                    )
+                }
+            }
+        }
+
+        private fun registerIcons() {
+            SquaremapProvider.get().iconRegistry()
+                .register(StaticStorage.markerIconKey, ImageIO.read(URL(StaticStorage.image)))
+            for (marker in Utils().getMarkerList(StaticStorage.file)!!) {
+                if (marker.iconUrl != "") {
+                    SquaremapProvider.get().iconRegistry()
+                        .register(Key.of("pl3xmarker_marker_icon_${marker.id}"), ImageIO.read(URL(marker.iconUrl)))
+                }
+            }
         }
 
         fun unregister() {

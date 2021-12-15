@@ -2,13 +2,19 @@ package god.sentix.pl3xmarker.commands
 
 import god.sentix.pl3xmarker.Chat
 import god.sentix.pl3xmarker.Marker
+import god.sentix.pl3xmarker.service.MarkerService
+import god.sentix.pl3xmarker.storage.Message
+import god.sentix.pl3xmarker.storage.StaticStorage
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import god.sentix.pl3xmarker.service.MarkerService
-import god.sentix.pl3xmarker.storage.Message
-import god.sentix.pl3xmarker.storage.StaticStorage
+import xyz.jpenilla.squaremap.api.Key
+import xyz.jpenilla.squaremap.api.SquaremapProvider
+import java.io.File
+import java.net.MalformedURLException
+import java.net.URL
+import javax.imageio.ImageIO
 
 class MarkerCMD : CommandExecutor {
 
@@ -53,11 +59,20 @@ class MarkerCMD : CommandExecutor {
                             val id = split[0].trim().toInt()
                             val name = split[1].trim()
                             val description = split[2].trim()
+                            val iconKey = "pl3xmarker_marker_icon_$id"
+
+                            val iconUrl: String = if (split.size == 4) {
+                                split[3].trim()
+                            } else {
+                                ""
+                            }
 
                             val marker = Marker(
                                 id,
                                 name,
                                 description,
+                                iconUrl,
+                                iconKey,
                                 sender.location.world.name,
                                 sender.location.x,
                                 sender.location.y,
@@ -67,21 +82,35 @@ class MarkerCMD : CommandExecutor {
                             )
 
                             if (MarkerService().Utils().getMarker(file, id) != null) {
-
+                                if (MarkerService().Utils().getMarker(file, id)!!.iconUrl != "") {
+                                    SquaremapProvider.get().iconRegistry().unregister(Key.key(marker.iconKey))
+                                    File(
+                                        "${
+                                            SquaremapProvider.get().webDir()
+                                        }/images/icon/registered/${marker.iconKey}.png"
+                                    ).delete()
+                                }
                                 MarkerService().Utils().updateMarker(file, marker)
                                 Chat().send(
                                     sender,
                                     "${Message.PREFIX}<gray>Updated existing marker with ID <color:#8411FB>$id<gray>.</gray>"
                                 )
-
                             } else {
-
                                 MarkerService().Utils().addMarker(file, marker)
                                 Chat().send(
                                     sender,
                                     "${Message.PREFIX}<gray>Created marker with ID <color:#8411FB>$id<gray>.</gray>"
                                 )
 
+                            }
+                            try {
+                                SquaremapProvider.get().iconRegistry().register(
+                                    Key.key(marker.iconKey), ImageIO.read(
+                                        URL(marker.iconUrl)
+                                    )
+                                )
+                            } catch (ex: MalformedURLException) {
+                                Chat().send(sender, "${Message.PREFIX}<gray>Marker icon set to default.")
                             }
 
                         } catch (ex: NumberFormatException) {
@@ -125,9 +154,75 @@ class MarkerCMD : CommandExecutor {
 
                     }
 
-                } else if (args.size == 2 && args[0].equals("help", true)) {
+                } else if (args.size == 2 && args[0].equals("show", true)) {
 
-                    sendHelpMessage(sender)
+                    try {
+
+                        val id = args[1].toInt()
+
+                        val marker = MarkerService().Utils().getMarker(file, id)
+
+                        if (marker != null) {
+
+                            Chat().send(sender, "")
+                            Chat().send(
+                                sender,
+                                "<dark_gray>» <dark_gray><st>-------------<r> <gray>× $gradient <gray>× <dark_gray><st>-------------<r> <dark_gray>«"
+                            )
+                            Chat().send(sender, "")
+
+                            Chat().send(sender, " <gray>× <color:#8411FB>ID <dark_gray>| <color:#8411FB>${marker.id}")
+                            Chat().send(
+                                sender,
+                                " <gray>× <color:#8411FB>NAME <dark_gray>| <color:#8411FB>${marker.name}"
+                            )
+                            Chat().send(
+                                sender,
+                                " <gray>× <color:#8411FB>DESCRIPTION <dark_gray>| <color:#8411FB>${marker.description}"
+                            )
+                            if (marker.iconUrl != "") {
+                                Chat().send(
+                                    sender, " <gray>× <color:#8411FB>URL <dark_gray>| <color:#8411FB>${
+                                        Chat().url(
+                                            "<color:#8411FB><u>${marker.iconUrl}", "<color:#8411FB>SHOW",
+                                            marker.iconUrl
+                                        )
+                                    }"
+                                )
+                            }
+
+                            Chat().send(sender, "")
+                            Chat().send(
+                                sender,
+                                " <gray>× <color:#8411FB>${
+                                    Chat().clickable(
+                                        "<dark_gray>[<color:#8411FB>LIST</color>]",
+                                        "<color:#8411FB>SHOW LIST",
+                                        "/pl3xmarker"
+                                    )
+                                }"
+                            )
+                            Chat().send(sender, "")
+                            Chat().send(
+                                sender,
+                                "<dark_gray>» <dark_gray><st>-------------<r> <gray>× $gradient <gray>× <dark_gray><st>-------------<r> <dark_gray>«"
+                            )
+                            Chat().send(sender, "")
+
+                        } else {
+
+                            Chat().send(
+                                sender,
+                                "${Message.PREFIX}<gray>No marker with ID <color:#8411FB>$id <gray>found.</gray>"
+                            )
+
+                        }
+
+                    } catch (ex: NumberFormatException) {
+
+                        Chat().send(sender, Message.NUMBER_EXC)
+
+                    }
 
                 } else {
 
@@ -150,43 +245,65 @@ class MarkerCMD : CommandExecutor {
         return true
     }
 
-    val marker = "<gradient:#C028FF:#5B00FF><bold>Marker</gradient>"
+    val gradient = "<gradient:#C028FF:#5B00FF><b>Marker</b></gradient>"
 
     private fun sendHelpMessage(sender: Player) {
 
-        Chat().send(sender, " ")
-        Chat().send(sender, "<dark_gray>» <dark_gray><st>-------------<r> <gray>× $marker <gray>× <dark_gray><st>-------------<r> <dark_gray>«")
-        Chat().send(sender, " ")
-
-        Chat().send(sender, " <gray>× <color:#8411FB>Usage:")
-        Chat().send(sender, " ")
+        Chat().send(sender, "")
         Chat().send(
             sender,
-            " <gray>× <color:#8411FB>/pl3xmarker set <white><ID></white> | <white><NAME></white> | <white><DESCRIPTION></white></color:#8411FB>"
+            "<dark_gray>» <dark_gray><st>-------------<r> <gray>× $gradient <gray>× <dark_gray><st>-------------<r> <dark_gray>«"
+        )
+        Chat().send(sender, "")
+
+        Chat().send(sender, " <gray>× <color:#8411FB>Usage:")
+        Chat().send(sender, "")
+        Chat().send(
+            sender,
+            " <gray>× <color:#8411FB>/pl3xmarker set <white><ID></white> | <white><NAME></white> | <white><DESCRIPTION></white> <dark_gray>[</dark_gray>| <white><ICON-URL></white><dark_gray>]</dark_gray></color:#8411FB>"
         )
         Chat().send(sender, " <gray>× <color:#8411FB>/pl3xmarker remove <white><ID></white>")
+        Chat().send(sender, " <gray>× <color:#8411FB>/pl3xmarker show <white><ID></white>")
 
-        Chat().send(sender, " ")
-        Chat().send(sender, "<dark_gray>» <dark_gray><st>-------------<r> <gray>× $marker <gray>× <dark_gray><st>-------------<r> <dark_gray>«")
-        Chat().send(sender, " ")
+        Chat().send(sender, "")
+        Chat().send(
+            sender,
+            "<dark_gray>» <dark_gray><st>-------------<r> <gray>× $gradient <gray>× <dark_gray><st>-------------<r> <dark_gray>«"
+        )
+        Chat().send(sender, "")
 
     }
 
     private fun sendMarkerList(sender: Player, markerList: MutableList<Marker>) {
 
-        Chat().send(sender, " ")
-        Chat().send(sender, "<dark_gray>» <dark_gray><st>-------------<r> <gray>× $marker <gray>× <dark_gray><st>-------------<r> <dark_gray>«")
-        Chat().send(sender, " ")
+        Chat().send(sender, "")
+        Chat().send(
+            sender,
+            "<dark_gray>» <dark_gray><st>-------------<r> <gray>× $gradient <gray>× <dark_gray><st>-------------<r> <dark_gray>«"
+        )
+        Chat().send(sender, "")
 
         Chat().send(sender, " <gray>× <color:#8411FB>Markers <gray>[<color:#8411FB>" + markerList.size + "<gray>]")
-        Chat().send(sender, " ")
+        Chat().send(sender, "")
         for (marker in markerList) {
-            Chat().send(sender, " <gray>× <color:#8411FB>${marker.id} <dark_gray>| <color:#8411FB>${marker.name}")
+            Chat().send(
+                sender,
+                " <gray>× <color:#8411FB>${marker.id} <color:#8411FB>${
+                    Chat().clickable(
+                        "<dark_gray>[<color:#8411FB>SHOW</color>]",
+                        "<color:#8411FB>SHOW",
+                        "/pl3xmarker show ${marker.id}"
+                    )
+                }"
+            )
         }
 
-        Chat().send(sender, " ")
-        Chat().send(sender, "<dark_gray>» <dark_gray><st>-------------<r> <gray>× $marker <gray>× <dark_gray><st>-------------<r> <dark_gray>«")
-        Chat().send(sender, " ")
+        Chat().send(sender, "")
+        Chat().send(
+            sender,
+            "<dark_gray>» <dark_gray><st>-------------<r> <gray>× $gradient <gray>× <dark_gray><st>-------------<r> <dark_gray>«"
+        )
+        Chat().send(sender, "")
 
     }
 

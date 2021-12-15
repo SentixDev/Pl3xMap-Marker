@@ -1,12 +1,12 @@
 package god.sentix.pl3xmarker.tasks
 
-import net.pl3x.map.api.Key
-import net.pl3x.map.api.MapWorld
-import net.pl3x.map.api.Point
-import net.pl3x.map.api.SimpleLayerProvider
-import net.pl3x.map.api.marker.Icon
-import net.pl3x.map.api.marker.Marker
-import net.pl3x.map.api.marker.MarkerOptions
+import xyz.jpenilla.squaremap.api.Key
+import xyz.jpenilla.squaremap.api.MapWorld
+import xyz.jpenilla.squaremap.api.Point
+import xyz.jpenilla.squaremap.api.SimpleLayerProvider
+import xyz.jpenilla.squaremap.api.marker.Icon
+import xyz.jpenilla.squaremap.api.marker.Marker
+import xyz.jpenilla.squaremap.api.marker.MarkerOptions
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.scheduler.BukkitRunnable
@@ -28,14 +28,20 @@ class Pl3xMapTask(world: MapWorld, provider: SimpleLayerProvider) : BukkitRunnab
         provider.clearMarkers()
         MarkerService().Utils().getMarkerList(StaticStorage.file)?.forEach { marker ->
             if (Bukkit.getWorld(marker.world)?.uid == world.uuid()) {
+                val iconKey: Key = if (marker.iconUrl != "") {
+                    Key.of(marker.iconKey)
+                } else {
+                    StaticStorage.markerIconKey
+                }
                 handle(
                     marker.id,
                     marker.name,
                     marker.description,
+                    iconKey,
                     Location(
                         Bukkit.getWorld(marker.world),
                         marker.locX,
-                        marker.loxY,
+                        marker.locY,
                         marker.locZ,
                         marker.yaw,
                         marker.pitch
@@ -47,9 +53,9 @@ class Pl3xMapTask(world: MapWorld, provider: SimpleLayerProvider) : BukkitRunnab
 
     }
 
-    private fun handle(id: Int, name: String, description: String, location: Location) {
+    private fun handle(id: Int, name: String, description: String, iconKey: Key, location: Location) {
         val worldName = location.world.name
-        val icon: Icon = Marker.icon(Point.fromLocation(location), StaticStorage.warpIconKey, 16)
+        val icon: Icon = Marker.icon(Point.fromLocation(location), iconKey, 16)
         icon.markerOptions(
             MarkerOptions.builder()
                 .hoverTooltip(
