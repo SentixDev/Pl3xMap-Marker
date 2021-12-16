@@ -12,17 +12,17 @@ version = "4.0"
 
 repositories {
     mavenCentral()
-    maven("https://jitpack.io")
+    maven("https://repo.jpenilla.xyz/snapshots/")
     maven("https://papermc.io/repo/repository/maven-public/")
     maven("'https://oss.sonatype.org/content/groups/public/")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT")
-    compileOnly("com.github.NeumimTo:Pl3xMap:master-SNAPSHOT")
+    compileOnly("xyz.jpenilla:squaremap-api:1.1.0-SNAPSHOT")
     implementation("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0-RC2")
     implementation("org.bstats:bstats-bukkit:2.2.1")
 }
 

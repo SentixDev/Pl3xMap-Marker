@@ -1,7 +1,7 @@
 package god.sentix.pl3xmarker.storage
 
 import god.sentix.pl3xmarker.Main
-import net.pl3x.map.api.Key
+import xyz.jpenilla.squaremap.api.Key
 import god.sentix.pl3xmarker.tasks.Pl3xMapTask
 
 class StaticStorage {

@@ -5,12 +5,12 @@ import god.sentix.pl3xmarker.Marker
 import god.sentix.pl3xmarker.service.MarkerService
 import god.sentix.pl3xmarker.storage.Message
 import god.sentix.pl3xmarker.storage.StaticStorage
-import net.pl3x.map.api.Key
-import net.pl3x.map.api.Pl3xMapProvider
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import xyz.jpenilla.squaremap.api.Key
+import xyz.jpenilla.squaremap.api.SquaremapProvider
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URL
@@ -91,10 +91,10 @@ class MarkerCMD : CommandExecutor {
                     if (MarkerService().Utils().getMarker(file, id) != null) {
 
                         if (MarkerService().Utils().getMarker(file, id)!!.iconUrl != "") {
-                            Pl3xMapProvider.get().iconRegistry().unregister(Key.key(marker.iconKey))
+                            SquaremapProvider.get().iconRegistry().unregister(Key.key(marker.iconKey))
                             File(
                                 "${
-                                    Pl3xMapProvider.get().webDir()
+                                    SquaremapProvider.get().webDir()
                                 }/images/icon/registered/${marker.iconKey}.png"
                             ).delete()
                         }
@@ -114,7 +114,7 @@ class MarkerCMD : CommandExecutor {
 
                     }
                     try {
-                        Pl3xMapProvider.get().iconRegistry().register(
+                        SquaremapProvider.get().iconRegistry().register(
                             Key.key(marker.iconKey), ImageIO.read(
                                 URL(marker.iconUrl)
                             )

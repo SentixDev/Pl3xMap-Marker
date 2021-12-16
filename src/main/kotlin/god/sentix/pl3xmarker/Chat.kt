@@ -1,9 +1,7 @@
 package god.sentix.pl3xmarker
 
 import net.kyori.adventure.audience.Audience
-import net.kyori.adventure.audience.ForwardingAudience
 import net.kyori.adventure.text.minimessage.MiniMessage
-import org.bukkit.Bukkit
 
 class Chat {
 

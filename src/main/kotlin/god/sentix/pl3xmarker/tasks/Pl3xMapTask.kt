@@ -1,12 +1,12 @@
 package god.sentix.pl3xmarker.tasks
 
-import net.pl3x.map.api.Key
-import net.pl3x.map.api.MapWorld
-import net.pl3x.map.api.Point
-import net.pl3x.map.api.SimpleLayerProvider
-import net.pl3x.map.api.marker.Icon
-import net.pl3x.map.api.marker.Marker
-import net.pl3x.map.api.marker.MarkerOptions
+import xyz.jpenilla.squaremap.api.Key
+import xyz.jpenilla.squaremap.api.MapWorld
+import xyz.jpenilla.squaremap.api.Point
+import xyz.jpenilla.squaremap.api.SimpleLayerProvider
+import xyz.jpenilla.squaremap.api.marker.Icon
+import xyz.jpenilla.squaremap.api.marker.Marker
+import xyz.jpenilla.squaremap.api.marker.MarkerOptions
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.scheduler.BukkitRunnable
