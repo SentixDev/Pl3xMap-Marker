@@ -68,6 +68,7 @@ class Main : JavaPlugin() {
     private fun initConfiguration() {
         config.addDefault("layer-name", "Marker")
         config.addDefault("icon-url", "https://cdn.upload.systems/uploads/1zRKxN3t.png")
+        config.addDefault("icon-size", 16)
         config.options().copyDefaults(true)
         saveConfig()
 

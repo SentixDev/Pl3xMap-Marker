@@ -24,31 +24,17 @@ class TabCompleter : TabCompleter {
                 return suggests
             }
             if (args.size == 2) {
-                suggests.add("<ID>")
+                suggests.add("ID")
                 return suggests
             }
+
             if (args.size == 3) {
-                suggests.add("|")
+                suggests.add("TEXT")
                 return suggests
             }
+
             if (args.size == 4) {
-                suggests.add("<NAME>")
-                return suggests
-            }
-            if (args.size == 5) {
-                suggests.add("|")
-                return suggests
-            }
-            if (args.size == 6) {
-                suggests.add("<DESCRIPTION>")
-                return suggests
-            }
-            if (args.size == 7) {
-                suggests.add("|")
-                return suggests
-            }
-            if (args.size == 8) {
-                suggests.add("<ICON-URL>")
+                suggests.add("ICON-URL")
                 return suggests
             }
         }
