@@ -101,14 +101,33 @@ class MarkerService {
                         )
                     )
                 }
+                if (marker.description != "") {
+                    MarkerService().Utils().updateMarker(
+                        StaticStorage.file, Marker(
+                            marker.id,
+                            "${marker.name}<br>${marker.description}",
+                            "",
+                            marker.iconUrl,
+                            marker.iconKey,
+                            marker.world,
+                            marker.locX,
+                            marker.locY,
+                            marker.locZ,
+                            marker.yaw,
+                            marker.pitch
+                        )
+                    )
+                }
             }
         }
 
         private fun registerIcons() {
-            Pl3xMapProvider.get().iconRegistry().register(StaticStorage.markerIconKey, ImageIO.read(URL(StaticStorage.image)))
+            Pl3xMapProvider.get().iconRegistry()
+                .register(StaticStorage.markerIconKey, ImageIO.read(URL(StaticStorage.image)))
             for (marker in Utils().getMarkerList(StaticStorage.file)!!) {
                 if (marker.iconUrl != "") {
-                    Pl3xMapProvider.get().iconRegistry().register(Key.of("pl3xmarker_marker_icon_${marker.id}"), ImageIO.read(URL(marker.iconUrl)))
+                    Pl3xMapProvider.get().iconRegistry()
+                        .register(Key.of("pl3xmarker_marker_icon_${marker.id}"), ImageIO.read(URL(marker.iconUrl)))
                 }
             }
         }
