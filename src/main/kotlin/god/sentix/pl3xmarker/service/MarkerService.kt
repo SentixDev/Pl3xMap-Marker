@@ -98,6 +98,23 @@ class MarkerService {
                         )
                     )
                 }
+                if (marker.description != "") {
+                    MarkerService().Utils().updateMarker(
+                        StaticStorage.file, Marker(
+                            marker.id,
+                            "${marker.name}<br>${marker.description}",
+                            "",
+                            marker.iconUrl,
+                            marker.iconKey,
+                            marker.world,
+                            marker.locX,
+                            marker.locY,
+                            marker.locZ,
+                            marker.yaw,
+                            marker.pitch
+                        )
+                    )
+                }
             }
         }
 

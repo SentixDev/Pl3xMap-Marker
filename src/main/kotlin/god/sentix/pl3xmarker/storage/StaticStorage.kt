@@ -14,6 +14,8 @@ class StaticStorage {
 
         val image = Main.configuration.getString("icon-url")
 
+        val size = Main.configuration.getInt("icon-size")
+
         val markerIconKey: Key = Key.of("pl3xmarker_marker_icon_")
 
         val providerMap: MutableMap<String, Pl3xMapTask> = HashMap()

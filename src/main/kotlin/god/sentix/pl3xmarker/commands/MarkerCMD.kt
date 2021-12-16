@@ -40,89 +40,87 @@ class MarkerCMD : CommandExecutor {
 
                     }
 
-                } else if (args.size >= 5) {
+                } else if (args.isNotEmpty() && args[0].equals("set", true)) {
 
-                    if (args[0].equals("set", true)) {
 
-                        var merged = ""
+                    var text = ""
 
-                        for (a in args) {
-                            if (!a.equals("set", true)) {
-                                merged = "$merged $a"
-                            }
+                    for (a in args) {
+                        if (!a.equals("set", true)) {
+                            text = "$text $a"
                         }
+                    }
 
-                        val split = merged.trim().split("|").toList()
+                    var id: Number = try {
+                        args[1].toInt()
+                    } catch (exc: Exception) {
+                        (999..99999).random()
+                    }
 
-                        try {
+                    val url: String = if (text.contains("http")) {
+                        "http${text.split("http")[1]}"
+                    } else {
+                        ""
+                    }
 
-                            val id = split[0].trim().toInt()
-                            val name = split[1].trim()
-                            val description = split[2].trim()
-                            val iconKey = "pl3xmarker_marker_icon_$id"
+                    if (text.contains(id.toString())) {
+                        text = text.replaceFirst(id.toString(), "").trim()
+                    }
+                    if (text.contains("http")) {
+                        text = text.replace(url, "").trim()
+                    }
 
-                            val iconUrl: String = if (split.size == 4) {
-                                split[3].trim()
-                            } else {
-                                ""
-                            }
+                    val iconKey = "pl3xmarker_marker_icon_$id"
 
-                            val marker = Marker(
-                                id,
-                                name,
-                                description,
-                                iconUrl,
-                                iconKey,
-                                sender.location.world.name,
-                                sender.location.x,
-                                sender.location.y,
-                                sender.location.z,
-                                sender.location.yaw,
-                                sender.location.pitch
-                            )
+                    id = id.toInt()
 
-                            if (MarkerService().Utils().getMarker(file, id) != null) {
-                                if (MarkerService().Utils().getMarker(file, id)!!.iconUrl != "") {
-                                    SquaremapProvider.get().iconRegistry().unregister(Key.key(marker.iconKey))
-                                    File(
-                                        "${
-                                            SquaremapProvider.get().webDir()
-                                        }/images/icon/registered/${marker.iconKey}.png"
-                                    ).delete()
-                                }
-                                MarkerService().Utils().updateMarker(file, marker)
-                                Chat().send(
-                                    sender,
-                                    "${Message.PREFIX}<gray>Updated existing marker with ID <color:#8411FB>$id<gray>.</gray>"
-                                )
-                            } else {
-                                MarkerService().Utils().addMarker(file, marker)
-                                Chat().send(
-                                    sender,
-                                    "${Message.PREFIX}<gray>Created marker with ID <color:#8411FB>$id<gray>.</gray>"
-                                )
+                    val marker = Marker(
+                        id,
+                        text,
+                        "",
+                        url,
+                        iconKey,
+                        sender.location.world.name,
+                        sender.location.x,
+                        sender.location.y,
+                        sender.location.z,
+                        sender.location.yaw,
+                        sender.location.pitch
+                    )
 
-                            }
-                            try {
-                                SquaremapProvider.get().iconRegistry().register(
-                                    Key.key(marker.iconKey), ImageIO.read(
-                                        URL(marker.iconUrl)
-                                    )
-                                )
-                            } catch (ex: MalformedURLException) {
-                                Chat().send(sender, "${Message.PREFIX}<gray>Marker icon set to default.")
-                            }
+                    if (MarkerService().Utils().getMarker(file, id) != null) {
 
-                        } catch (ex: NumberFormatException) {
-
-                            Chat().send(sender, Message.NUMBER_EXC)
-
+                        if (MarkerService().Utils().getMarker(file, id)!!.iconUrl != "") {
+                            SquaremapProvider.get().iconRegistry().unregister(Key.key(marker.iconKey))
+                            File(
+                                "${
+                                    SquaremapProvider.get().webDir()
+                                }/images/icon/registered/${marker.iconKey}.png"
+                            ).delete()
                         }
+                        MarkerService().Utils().updateMarker(file, marker)
+                        Chat().send(
+                            sender,
+                            "${Message.PREFIX}<gray>Updated existing marker with ID <color:#8411FB>$id<gray>.</gray>"
+                        )
 
                     } else {
 
-                        sendHelpMessage(sender)
+                        MarkerService().Utils().addMarker(file, marker)
+                        Chat().send(
+                            sender,
+                            "${Message.PREFIX}<gray>Created marker with ID <color:#8411FB>$id<gray>.</gray>"
+                        )
 
+                    }
+                    try {
+                        SquaremapProvider.get().iconRegistry().register(
+                            Key.key(marker.iconKey), ImageIO.read(
+                                URL(marker.iconUrl)
+                            )
+                        )
+                    } catch (ex: MalformedURLException) {
+                        Chat().send(sender, "${Message.PREFIX}<gray>Marker icon set to default.")
                     }
 
                 } else if (args.size == 2 && args[0].equals("remove", true)) {
@@ -172,14 +170,12 @@ class MarkerCMD : CommandExecutor {
                             Chat().send(sender, "")
 
                             Chat().send(sender, " <gray>× <color:#8411FB>ID <dark_gray>| <color:#8411FB>${marker.id}")
-                            Chat().send(
-                                sender,
-                                " <gray>× <color:#8411FB>NAME <dark_gray>| <color:#8411FB>${marker.name}"
-                            )
-                            Chat().send(
-                                sender,
-                                " <gray>× <color:#8411FB>DESCRIPTION <dark_gray>| <color:#8411FB>${marker.description}"
-                            )
+                            if (marker.name != "") {
+                                Chat().send(
+                                    sender,
+                                    " <gray>× <color:#8411FB>TEXT <dark_gray>| <color:#8411FB>${marker.name}"
+                                )
+                            }
                             if (marker.iconUrl != "") {
                                 Chat().send(
                                     sender, " <gray>× <color:#8411FB>URL <dark_gray>| <color:#8411FB>${
@@ -258,13 +254,13 @@ class MarkerCMD : CommandExecutor {
 
         Chat().send(sender, " <gray>× <color:#8411FB>Usage:")
         Chat().send(sender, "")
+        Chat().send(sender, " <gray>× <color:#8411FB>/pl3xmarker - shows all markers")
         Chat().send(
             sender,
-            " <gray>× <color:#8411FB>/pl3xmarker set <white><ID></white> | <white><NAME></white> | <white><DESCRIPTION></white> <dark_gray>[</dark_gray>| <white><ICON-URL></white><dark_gray>]</dark_gray></color:#8411FB>"
+            " <gray>× <color:#8411FB>/pl3xmarker set <white><ID></white> <white><TEXT></white> <white><ICON-URL></white>"
         )
         Chat().send(sender, " <gray>× <color:#8411FB>/pl3xmarker remove <white><ID></white>")
         Chat().send(sender, " <gray>× <color:#8411FB>/pl3xmarker show <white><ID></white>")
-
         Chat().send(sender, "")
         Chat().send(
             sender,

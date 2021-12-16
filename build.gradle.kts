@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "god.sentix"
-version = "3.0"
+version = "4.0"
 
 repositories {
     mavenCentral()
