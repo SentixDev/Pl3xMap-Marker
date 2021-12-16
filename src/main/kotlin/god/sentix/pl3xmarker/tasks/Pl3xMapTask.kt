@@ -36,7 +36,6 @@ class Pl3xMapTask(world: MapWorld, provider: SimpleLayerProvider) : BukkitRunnab
                 handle(
                     marker.id,
                     marker.name,
-                    marker.description,
                     iconKey,
                     Location(
                         Bukkit.getWorld(marker.world),
@@ -53,7 +52,7 @@ class Pl3xMapTask(world: MapWorld, provider: SimpleLayerProvider) : BukkitRunnab
 
     }
 
-    private fun handle(id: Int, name: String, description: String, iconKey: Key, location: Location) {
+    private fun handle(id: Int, name: String, iconKey: Key, location: Location) {
         val worldName = location.world.name
         val icon: Icon = Marker.icon(Point.fromLocation(location), iconKey, StaticStorage.size)
         if (name.isNotEmpty()) {
