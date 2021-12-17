@@ -7,6 +7,7 @@ import god.sentix.pl3xmarker.storage.Message
 import god.sentix.pl3xmarker.storage.StaticStorage
 import net.pl3x.map.api.Key
 import net.pl3x.map.api.Pl3xMapProvider
+import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -94,8 +95,8 @@ class MarkerCMD : CommandExecutor {
                             Pl3xMapProvider.get().iconRegistry().unregister(Key.key(marker.iconKey))
                             File(
                                 "${
-                                    Pl3xMapProvider.get().webDir()
-                                }/images/icon/registered/${marker.iconKey}.png"
+                                    Bukkit.getPluginManager().getPlugin("Pl3xMap")?.dataFolder
+                                }/web/images/icon/registered/${marker.iconKey}.png"
                             ).delete()
                         }
                         MarkerService().Utils().updateMarker(file, marker)
