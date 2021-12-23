@@ -1,5 +1,5 @@
 name: Pl3xMap-Marker
-version: '4.0'
+version: '4.1'
 main: god.sentix.pl3xmarker.Main
 api-version: 1.18
 depend: [ squaremap ]

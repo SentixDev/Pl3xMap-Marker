@@ -1,9 +1,5 @@
 package god.sentix.pl3xmarker.tasks
 
-import xyz.jpenilla.squaremap.api.Key
-import xyz.jpenilla.squaremap.api.MapWorld
-import xyz.jpenilla.squaremap.api.Point
-import xyz.jpenilla.squaremap.api.SimpleLayerProvider
 import xyz.jpenilla.squaremap.api.marker.Icon
 import xyz.jpenilla.squaremap.api.marker.Marker
 import xyz.jpenilla.squaremap.api.marker.MarkerOptions
@@ -12,6 +8,7 @@ import org.bukkit.Location
 import org.bukkit.scheduler.BukkitRunnable
 import god.sentix.pl3xmarker.service.MarkerService
 import god.sentix.pl3xmarker.storage.StaticStorage
+import xyz.jpenilla.squaremap.api.*
 
 class Pl3xMapTask(world: MapWorld, provider: SimpleLayerProvider) : BukkitRunnable() {
 
@@ -27,7 +24,7 @@ class Pl3xMapTask(world: MapWorld, provider: SimpleLayerProvider) : BukkitRunnab
 
         provider.clearMarkers()
         MarkerService().Utils().getMarkerList(StaticStorage.file)?.forEach { marker ->
-            if (Bukkit.getWorld(marker.world)?.uid == world.uuid()) {
+            if (Bukkit.getWorld(marker.world)?.uid == BukkitAdapter.bukkitWorld(world).uid) {
                 val iconKey: Key = if (marker.iconUrl != "") {
                     Key.of(marker.iconKey)
                 } else {
@@ -54,7 +51,7 @@ class Pl3xMapTask(world: MapWorld, provider: SimpleLayerProvider) : BukkitRunnab
 
     private fun handle(id: Int, name: String, iconKey: Key, location: Location) {
         val worldName = location.world.name
-        val icon: Icon = Marker.icon(Point.fromLocation(location), iconKey, StaticStorage.size)
+        val icon: Icon = Marker.icon(BukkitAdapter.point(location), iconKey, StaticStorage.size)
         if (name.isNotEmpty()) {
             icon.markerOptions(
                 MarkerOptions.builder()

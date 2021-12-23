@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "god.sentix"
-version = "4.0"
+version = "4.1"
 
 repositories {
     mavenCentral()
@@ -18,12 +18,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT")
-    compileOnly("xyz.jpenilla:squaremap-api:1.1.0-SNAPSHOT")
-    implementation("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0-RC2")
-    implementation("org.bstats:bstats-bukkit:2.2.1")
+    compileOnly("io.papermc.paper", "paper-api", "1.18.1-R0.1-SNAPSHOT")
+    compileOnly("xyz.jpenilla", "squaremap-api", "1.1.0-SNAPSHOT")
+    implementation("net.kyori", "adventure-text-minimessage", "4.1.0-SNAPSHOT")
+    implementation("org.jetbrains.kotlin", "kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin", "kotlin-stdlib", "1.6.0-RC2")
+    implementation("org.bstats", "bstats-bukkit", "2.2.1")
 }
 
 

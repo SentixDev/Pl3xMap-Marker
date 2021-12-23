@@ -7,6 +7,7 @@ import god.sentix.pl3xmarker.Main
 import god.sentix.pl3xmarker.Marker
 import god.sentix.pl3xmarker.storage.StaticStorage
 import god.sentix.pl3xmarker.tasks.Pl3xMapTask
+import xyz.jpenilla.squaremap.api.BukkitAdapter
 import xyz.jpenilla.squaremap.api.Key
 import xyz.jpenilla.squaremap.api.SimpleLayerProvider
 import xyz.jpenilla.squaremap.api.SquaremapProvider
@@ -71,10 +72,10 @@ class MarkerService {
                     .defaultHidden(false)
                     .build()
                 mapWorld.layerRegistry()
-                    .register(Key.of("pl3xmarker_" + mapWorld.uuid().toString() + "_marker"), provider)
+                    .register(Key.of("pl3xmarker_" + BukkitAdapter.bukkitWorld(mapWorld).uid + "_marker"), provider)
                 val task = Pl3xMapTask(mapWorld, provider)
                 Main.plugin.let { task.runTaskTimerAsynchronously(it, 0, 20L * 5) }
-                StaticStorage.providerMap[mapWorld.uuid().toString()] = task
+                StaticStorage.providerMap[BukkitAdapter.bukkitWorld(mapWorld).uid.toString()] = task
             }
 
         }
