@@ -1,4 +1,5 @@
-# Pl3xMap-Marker
+# Pl3xMap-Marker (Outdated)
+## New addon: https://github.com/SentixDev/squaremarker
 A simple marker extension for Pl3xMap (https://github.com/pl3xgaming/Pl3xMap)
 This plugin is an extension and only works in combination with Pl3xMap. 
 It offers the possibility to easily create markers yourself, which are then displayed on the map. 
